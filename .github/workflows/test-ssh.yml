@@ -37,7 +37,7 @@ jobs:
       # debug step: check we can push
       - name: push test to this repo
         run: |
-          cat "hello from inside the github action!" >> README.md
+          echo "hello from inside the github action!" >> README.md
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add -A .
