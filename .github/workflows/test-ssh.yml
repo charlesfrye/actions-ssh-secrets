@@ -25,11 +25,6 @@ jobs:
           # pass the private key | sans carriage returns | to ssh-add, along with the password returned by the file > hiding output
           echo "$SSH_PRIVATE_KEY" | tr -d '\r' | DISPLAY=NONE SSH_ASKPASS=~/.ssh_askpass ssh-add - > /dev/null
 
-      - name: checkout this repo
-        uses: actions/checkout@v2
-        with:
-          persist-credentials: false
-
       # debug step: print out the added identity
       - name: print ssh-add identities
         run: ssh-add -l
@@ -37,6 +32,7 @@ jobs:
       # debug step: check we can push
       - name: push test to this repo
         run: |
+          git remote set-url origin git@github.com:charlesfrye/actions-ssh-secrets.git
           echo "hello from inside the github action!" >> README.md
           git config --local user.email "charles@wandb.com"
           git config --local user.name "charles"
