@@ -32,4 +32,4 @@ jobs:
 
       # debug step: print out the added identity
       - name: print ssh-add identities
-        runs: ssh-add -l
+        run: ssh-add -l
