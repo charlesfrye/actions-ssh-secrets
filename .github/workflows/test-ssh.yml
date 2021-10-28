@@ -38,8 +38,8 @@ jobs:
       - name: push test to this repo
         run: |
           echo "hello from inside the github action!" >> README.md
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.email "charles@wandb.com"
+          git config --local user.name "charles"
           git add -A .
           git commit -m "testing SSH process"
           git push
