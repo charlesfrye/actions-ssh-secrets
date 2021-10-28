@@ -1,0 +1,35 @@
+name: Test SSH process
+
+env:
+  # share an ssh-agent socket across jobs
+  SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  test-ssh:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: checkout this repo
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: SSH authentication from secrets
+        env:
+          SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          # create an agent pointing at the shared socket > hiding output
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          # put the passphrase > into a file && make it executable
+          echo 'echo $SSH_PASSPHRASE' > ~/.ssh_askpass && chmod +x ~/.ssh_askpass
+          # pass the private key | sans carriage returns | to ssh-add, along with the password returned by the file > hiding output
+          echo 'echo $SSH_PRIVATE_KEY' | tr -d '\r' | DISPLAY=NONE SSH_ASKPASS=~/.ssh_askpass ssh-add - > /dev/null
+
+      # debug step: print out the added identity
+      - name: print ssh-add identities
+        runs: ssh-add -l
