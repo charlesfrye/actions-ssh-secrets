@@ -27,7 +27,7 @@ jobs:
           # put the passphrase > into a file && make it executable
           echo 'echo $SSH_PASSPHRASE' > ~/.ssh_askpass && chmod +x ~/.ssh_askpass
           # pass the private key | sans carriage returns | to ssh-add, along with the password returned by the file > hiding output
-          echo ${{ secrets.SSH_PRIVATE_KEY }} | tr -d '\r' | DISPLAY=NONE SSH_ASKPASS=~/.ssh_askpass ssh-add - > /dev/null
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | DISPLAY=NONE SSH_ASKPASS=~/.ssh_askpass ssh-add - > /dev/null
           # clean up file with passphrase
           rm ~/.ssh_askpass
 
